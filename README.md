@@ -1,5 +1,5 @@
 # ssh-to-actions
-A GitHub Action that setups up a reverse SSH tunnel allowing you to SSH into the runner box from any internet-accessible machine.
+A GitHub Action that sets up a reverse SSH tunnel allowing you to SSH into the runner box from any internet-accessible machine.
 
 ## How it works
 
