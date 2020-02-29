@@ -1,0 +1,33 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Configure SSH
+      run: |
+        mkdir ~/.ssh
+        
+        # These keys are used to authenticate with your accessible host.
+        echo "${{ secrets.ssh_public_key }}" > ~/.ssh/id_rsa.pub
+        echo "${{ secrets.ssh_private_key }}" > ~/.ssh/id_rsa
+        
+        chmod 400 ~/.ssh/id_rsa
+        
+        # Set the runner account password, we'll need it when we ssh into it
+        echo "runner:${{ secrets.password }}" | sudo chpasswd
+    - name: Connect to remote server
+      run: |
+        # Ping check, make sure auth is working as expected
+        ssh -o StrictHostKeyChecking=no ${{ secrets.reachable_host }} uptime 
+        
+        # Setup the reverse tunnel. Port 22 locally is ssh,
+        # port 22222 is the port on accessible_host used to access the tunnel
+        ssh -N -T -R22222:localhost:22 ${{ secrets.reachable_host }}
+        
+        # Note: This command will halt and keep the box spinning forever. 
+        # TODO: Put in some sort of timeout, or kill switch possibly via ssh?
