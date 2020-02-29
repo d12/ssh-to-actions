@@ -29,4 +29,4 @@ When prompted for a password, use the password you set when configuring the secr
 
 After entering a password, you should be setup with a SSH connection to the runner machine :)
 
-
+![](https://i.imgur.com/yGSsRgY.png)
