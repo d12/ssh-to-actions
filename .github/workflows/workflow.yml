@@ -8,6 +8,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Ensure secrets exist
+      run: |
+        echo "Ensuring GitHub Actions secrets are set..."
+        
+        if [ "${{ secrets.ssh_public_key }}" == "" ]; then
+          echo "[Error] ssh_public_key secret does not exist"
+          exit 1
+        fi
+        if [ "${{ secrets.ssh_private_key }}" == "" ]; then
+          echo "[Error] ssh_private_key secret does not exist"
+          exit 1
+        fi
+        if [ "${{ secrets.password }}" == "" ]; then
+          echo "[Error] password secret does not exist"
+          exit 1
+        fi
+        if [ "${{ secrets.reachable_host }}" == "" ]; then
+          echo "[Error] reachable_host secret does not exist"
+          exit 1
+        fi
+        
+        echo "All secrets found!"
     - name: Configure SSH
       run: |
         mkdir ~/.ssh
